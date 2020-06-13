@@ -1,30 +1,46 @@
 #include <iostream>
 #include <vector>
+#include <imgproc/types_c.h>
+#include <complex>
 #include "matrix.hpp"
-#include "complex.hpp"
-
+#include "opencv.hpp"
+using namespace cv;
 using namespace std;
 
-void test_int();
+void test_img(Mat,Mat);
 
-void test_double();
+void test_matrix_computation_int();
 
-void test_complex();
+void test_matrix_computation_double();
+
+void test_matrix_computation_complex();
 
 int main() {
-    int op = 0;
-    cout << "Please enter an integer to test different types(1-int,2-double,3-complex): " << endl;
-    cin >> op;
-    if (op == 1) {
-        test_int();
-    } else if (op == 2) {
-        test_double();
-    } else {
-        test_complex();
-    }
+    test_matrix_computation_int();
+    test_matrix_computation_double();
+    test_matrix_computation_complex();
+
+    Mat img1 = imread("../img1.jpg"); // 3 channel BGR color image
+    Mat img2 = imread("../img1.jpg");
+    test_img(img1, img2);
 }
 
-void test_int() {
+void test_img(Mat img1, Mat img2){
+    /** use opencv to get the image and convert it to our matrix to do computation
+     *  after computation, convert matrix to Mat and use opencv to show it
+     * */
+    matrix<int> mat1(img1);
+    matrix<int> mat2(img2);
+    matrix<int> mat = mat1+mat2;
+    imshow("mat1+mat2",mat.to_Mat());
+    mat=mat1;
+    imshow("mat1",mat.to_Mat());
+    mat=mat1-mat2;
+    imshow("mat1-mat2",mat.to_Mat());
+    waitKey();
+}
+
+void test_matrix_computation_int() {
     int arr1[2] = {1, 2};
     int arr2[2] = {1, 2};
     int a1[1] = {1};
@@ -74,7 +90,7 @@ void test_int() {
     cout << "mat3 = mat1 cross product mat2 = \n" << mat3 << endl;
 };
 
-void test_double() {
+void test_matrix_computation_double() {
     double arr1[2] = {1.1, 2.3};
     double arr2[2] = {1.2, 2.2};
     double a1[1] = {1.2};
@@ -99,27 +115,35 @@ void test_double() {
     cout << "m8 = m3*3 = \n" << m8;
 };
 
-void test_complex() {
-    complex c1(1, 1);
-    complex c2(2, 1);
-    complex c3 = c1 + c2;
-    complex c4 = c2 - c1;
-    complex c5 = c1 * c2;
+void test_matrix_computation_complex() {
+    complex<int> ci1(1,1);
+    complex<int> ci2 = conj(ci1);
+    complex<int> t[4] = {ci1,ci2,ci1,ci2};
+    complex<int> * tt = t;
+    matrix<complex<int>> mm1(2,2,t);
+    matrix<complex<int>> mm2= mm1.conjugation_matrix();
+    cout << mm1 << endl;
+    cout << mm2 << endl;
+    complex<double> c1(1, 1);
+    complex<double> c2(2, 1);
+    complex<double> c3 = c1 + c2;
+    complex<double> c4 = c2 - c1;
+    complex<double> c5 = c1 * c2;
     cout << "c1 = " << c1 << endl;
     cout << "c2 = " << c2 << endl;
     cout << "c3 = c1+c2 = " << c3 << endl;
     cout << "c4 = c2-c1 = " << c4 << endl;
     cout << "c5 = c1*c2 = " << c5 << endl;
-    complex arr1[2] = {c1, c2};
-    complex arr2[2] = {c3, c4};
-    complex *p[2] = {arr1, arr2};
-    matrix<complex> m1(2, 2, p);
-    matrix<complex> m2(2, 2, p);
-    matrix<complex> m3 = m1 + m2;
-    matrix<complex> m4 = m1 * m2;
-    matrix<complex> m5 = 2 * m2;
-    matrix<complex> m6 = m2 * 4;
-    matrix<complex> m0 = m6 / 2;
+    complex<double> arr1[2] = {c1, c2};
+    complex<double> arr2[2] = {c3, c4};
+    complex<double> *p[2] = {arr1, arr2};
+    matrix<complex<double>> m1(2, 2, p);
+    matrix<complex<double>> m2(2, 2, p);
+    matrix<complex<double>> m3 = m1 + m2;
+    matrix<complex<double>> m4 = m1 * m2;
+    matrix<complex<double>> m5 = 2 * m2;
+    matrix<complex<double>> m6 = m2 * 4;
+    matrix<complex<double>> m0 = m6 / 2;
 
     cout << "m1 = \n" << m1 << endl;
     cout << "m2 = \n" << m2 << endl;
@@ -128,32 +152,32 @@ void test_complex() {
     cout << "m5 = 2 *m2 = \n" << m5 << endl;
     cout << "m6 = m2* 4 = \n" << m6 << endl;
     cout << "m0 = m6/ 2 = \n" << m0 << endl;
-    matrix<complex> m7 = m6.tran_matrix();
+    matrix<complex<double>> m7 = m6.tran_matrix();
     cout << "m7 = m6'trans = \n" << m7 << endl;
-    matrix<complex> m8 = m6.conjugation_matrix();
+    matrix<complex<double>> m8 = m6.conjugation_matrix();
     cout << "m8 = m6'conju = \n" << m8 << endl;
-    matrix<complex> m9 = m8.elem_wise_mul(m6);
+    matrix<complex<double>> m9 = m8.elem_wise_mul(m6);
     cout << "m9 = m8 elem_wise_mul m6 = \n" << m9 << endl;
-    vector<complex> v;
+    vector<complex<double>> v;
     v.push_back(1);
     v.push_back(2);
-    matrix<complex> ma1 = m8.vector_mul(v);
+    matrix<complex<double>> ma1 = m8.vector_mul(v);
     cout << "ma1 = vector(1,2) * ma1 = \n" << ma1 << endl;
-    complex a1[1]={c1};
-    complex a2[1]={c2};
-    complex *p1[2]={a1,a2};
-    matrix<complex> ma2(2,1,p1);
-    matrix<complex> ma3 = ma2.mul_vector(v);
+    complex<double> a1[1]={c1};
+    complex<double> a2[1]={c2};
+    complex<double> *p1[2]={a1, a2};
+    matrix<complex<double>> ma2(2, 1, p1);
+    matrix<complex<double>> ma3 = ma2.mul_vector(v);
     cout << "ma2 = \n" << ma2 << endl;
     cout << "ma3 = ma1 * vector(1,2) = \n" << ma3 << endl;
-    complex ar1[3] = {complex(1,2),complex(1,3),complex(1,4)};
-    complex ar2[3] = {complex(1,-1),complex(1,0),complex(1,1)};
-    matrix<complex> mat1(3,1,ar1);
-    matrix<complex> mat2(3,1,ar2);
+    complex<double> ar1[3] = {complex<double>(1, 2), complex<double>(1, 3), complex<double>(1, 4)};
+    complex<double> ar2[3] = {complex<double>(1, -1), complex<double>(1, 0), complex<double>(1, 1)};
+    matrix<complex<double>> mat1(3, 1, ar1);
+    matrix<complex<double>> mat2(3, 1, ar2);
     cout << "mat1 = \n" << mat1 << endl;
     cout << "mat2 = \n" << mat2 << endl;
-    complex result = mat1.dot_product(mat2);
+    complex<double> result = mat1.dot_product(mat2);
     cout << "result = mat1 dot product mat2 = " << result << endl;
-    matrix<complex> mat3 = mat1.cross_product(mat2);
+    matrix<complex<double>> mat3 = mat1.cross_product(mat2);
     cout << "mat3 = mat1 cross product mat2 = \n" << mat3 << endl;
 }
