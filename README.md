@@ -1,16 +1,65 @@
-# matrix_library
+#### 简介
+
+简单的矩阵运算库，以及 OpenCV 调用运算库做简单的图片处理
 
 
-done:
 
-- [x] 矩阵创建：支持用一维数组，二维数组，或者 Mat 对象（默认为：8UC3）创建矩阵
-- [x] 矩阵转换：支持 matrix 转换为 opencv Mat对象（8UC3）。（颜色空间：RGB，数据类型：unsigned char，3 channel BGR color image）
-- [x] matrix 的基本计算。
-- [x] matrix 支持 int, double, complex。
+#### 开发环境
 
-unsolved:
+CLion + mingw64
 
-- [ ] 要求4，5，6，7，8（？），9
-- [ ] 稀疏矩阵
-- [ ] matrix 计算方式与 opencv 不一致。比如：opencv 中加法超过255就直接为255，两像素值差为负，则直接为0
+
+
+#### Run Demo
+
+1.修改 CMakeList.txt 文件中的 OpenCV 安装地址，且需要配置 OpenCV_DIR（大小写要写对） 的环境变量
+
+参考：
+
+```C++
+cmake_minimum_required(VERSION 3.6)
+PROJECT(project)
+
+set(OpenCV_INCLUDE_DIRS D:/CS_Tools/opencv/mingw_build/install/include)
+FIND_PACKAGE(opencv REQUIRED)
+include_directories(${PROJECT_SOURCE_DIR} "D:/CS_Tools/opencv/mingw_build/install/include/opencv2")
+
+# 生成可执行文件
+add_executable(test main.cpp matrix.hpp SpMatrix.hpp my_exception.cpp)
+target_link_libraries(test ${OpenCV_LIBS})
+```
+
+环境变量：
+
+Open_CV: opencv/mingw_build/install
+
+2.直接运行 main.cpp 中的方法
+
+
+
+#### 文件说明
+
+##### Test image
+
+img1.jpg 
+
+img2.jpg
+
+
+
+##### Source file
+
+matrix.hpp
+
+my_exception.cpp
+
+SpMatrix.hpp
+
+
+
+##### CMakeList.txt
+
+CMakeLists.txt 
+
+
 
