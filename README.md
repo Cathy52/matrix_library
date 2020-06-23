@@ -4,9 +4,13 @@
 
 
 
+
+
 #### 开发环境
 
 CLion + mingw64
+
+
 
 
 
@@ -37,6 +41,8 @@ Open_CV: opencv/mingw_build/install
 
 
 
+
+
 #### 文件说明
 
 ##### Test image
@@ -47,6 +53,8 @@ img2.jpg
 
 
 
+
+
 ##### Source file
 
 matrix.hpp
@@ -54,6 +62,8 @@ matrix.hpp
 my_exception.cpp
 
 SpMatrix.hpp
+
+
 
 
 
